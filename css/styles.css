@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+:root {
+
+  /* space Collection */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-11: 44px;
+  --space-12: 48px;
+  --space-13: 56px;
+  --space-14: 60px;
+  --space-15: 64px;
+  --space-16: 68px;
+  --space-17: 80px;
+  --space-18: 96px;
+
+  /* breakpoints Collection */
+  --sm: 360px;
+  --md: 768px;
+  --lg: 1280px;
+  --xl: 1536px;
+
+  /* colors*/
+  --surface-50: #ffffff;
+  --surface-100: #f7f9fd;
+  --surface-200: #ecedee;
+  --surface-300: #cbcfd2;
+  --surface-400: #a7aeb4;
+  --surface-500: #8e979f;
+  --surface-600: #6b767f;
+  --surface-700: #4f575e;
+  --surface-800: #33383d;
+  --surface-900: #202327;
+  --primary-50: #f8f5ff;
+  --primary-100: #b99cfc;
+  --primary-200: #7d49f8;
+  --primary-300: #6528f7;
+  --primary-400: #501bce;
+  --secondary-50: #e8f1fc;
+  --secondary-100: #77a9ee;
+  --secondary-200: #1b6ddf;
+  --secondary-300: #1450a3;
+  --secondary-400: #114388;
+  --success-50: #f6fefb;
+  --success-100: #1bc590;
+  --success-200: #12825f;
+  --success-300: #0e674b;
+  --success-400: #0a4834;
+  --warning-50: #fffdfa;
+  --warning-100: #f9dbb5;
+  --warning-200: #f2ab53;
+  --warning-300: #ee9322;
+  --warning-400: #a6620d;
+  --dark-50: #121212;
+  --dark-100: #161616;
+  --dark-200: #1a1a1a;
+  --dark-300: #1c1c1c;
+  --dark-400: #1e1e1e;
+  --danger-50: #fbeaea;
+  --danger-100: #e16b6b;
+  --danger-200: #c92929;
+  --danger-300: #a92323;
+  --danger-400: #6e1717;
+  --opacity-primary: rgba(125, 73, 248, 0.15);
+  --opacity-secondary: rgba(28, 111, 227, 0.15);
+  --opacity-danger: rgba(201, 41, 41, 0.15);
+  --opacity-success: rgba(18, 130, 95, 0.15);
+  --opacity-warning: rgba(242, 171, 83, 0.15);
+  --opacity-modal: rgba(18, 18, 18, 0.92);
+
+}
+
+
+
