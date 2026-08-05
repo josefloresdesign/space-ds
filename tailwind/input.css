@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import "tailwindcss";
+
+@theme {
+    /* colors*/
+    --color-surface-50: #ffffff;
+    --color-surface-100: #f7f9fd;
+    --color-surface-200: #ecedee;
+    --color-surface-300: #cbcfd2;
+    --color-surface-400: #a7aeb4;
+    --color-surface-500: #8e979f;
+    --color-surface-600: #6b767f;
+    --color-surface-700: #4f575e;
+    --color-surface-800: #33383d;
+    --color-surface-900: #202327;
+    --color-primary-50: #f8f5ff;
+    --color-primary-100: #b99cfc;
+    --color-primary-200: #7d49f8;
+    --color-primary-300: #6528f7;
+    --color-primary-400: #501bce;
+    --color-secondary-50: #e8f1fc;
+    --color-secondary-100: #77a9ee;
+    --color-secondary-200: #1b6ddf;
+    --color-secondary-300: #1450a3;
+    --color-secondary-400: #114388;
+    --color-success-50: #f6fefb;
+    --color-success-100: #1bc590;
+    --color-success-200: #12825f;
+    --color-success-300: #0e674b;
+    --color-success-400: #0a4834;
+    --color-warning-50: #fffdfa;
+    --color-warning-100: #f9dbb5;
+    --color-warning-200: #f2ab53;
+    --color-warning-300: #ee9322;
+    --color-warning-400: #a6620d;
+    --color-dark-50: #121212;
+    --color-dark-100: #161616;
+    --color-dark-200: #1a1a1a;
+    --color-dark-300: #1c1c1c;
+    --color-dark-400: #1e1e1e;
+    --color-danger-50: #fbeaea;
+    --color-danger-100: #e16b6b;
+    --color-danger-200: #c92929;
+    --color-danger-300: #a92323;
+    --color-danger-400: #6e1717;
+    --color-opacity-primary: rgba(125, 73, 248, 0.15);
+    --color-opacity-secondary: rgba(28, 111, 227, 0.15);
+    --color-opacity-danger: rgba(201, 41, 41, 0.15);
+    --color-opacity-success: rgba(18, 130, 95, 0.15);
+    --color-opacity-warning: rgba(242, 171, 83, 0.15);
+    --color-opacity-modal: rgba(18, 18, 18, 0.92);
+
+    /* Font */
+    --font-space-ds: 'IBM Plex Sans', sans-serif;
+}
