@@ -1,0 +1,44 @@
+# Space DS
+
+> Open source design system by José Flores: the bridge between design and development. Same token names in Figma and in code, for plain CSS and Tailwind CSS v4, with light and dark mode. Components are styled only with tokens; semantic color tokens switch automatically between light and dark.
+
+Key facts:
+- Font: IBM Plex Sans (400, 600, 700, italic).
+- Every token is a CSS variable. Figma name `primary/500` = `--color-primary-500` = Tailwind `bg-primary-500`.
+- Use semantic colors in components: `--color-bg-*`, `--color-text-*`, `--color-icon-*`, `--color-border-*`, `--color-action-*`. Never hard-code hex values.
+- Control heights: `h-control-sm` 32, `h-control-md` 40 (default), `h-control-lg` 48. Radius `rounded-control`. Focus: `focus-visible:shadow-focus-ring`.
+- Dark mode: automatic with the system, or force it with `<html data-theme="dark">`. No `dark:` classes needed.
+
+## Getting started
+
+- [README](README.md): install for plain CSS and Tailwind v4
+- [Token reference](docs/tokens.md): every variable with its light and dark value
+- [tokens.json](tokens/tokens.json): all tokens in DTCG format
+
+## Foundations
+
+- [Color](docs/foundations/color.md): primitives, semantic tokens, dark mode
+- [Typography](docs/foundations/typography.md): type ramp from caption to display
+- [Space and sizing](docs/foundations/space-and-sizing.md): 4px scale, control, icon and avatar sizes
+- [Radius, shadow and effects](docs/foundations/radius-shadow-effects.md): radius, elevation, focus ring, opacity, blur
+- [Motion and layout](docs/foundations/motion-layout.md): durations, easing, z-index, breakpoints, responsive grid
+
+## Components
+
+- [Button](docs/components/button.md): actions; also icon button
+- [Input](docs/components/input.md): single-line field
+- [Text area](docs/components/text-area.md): multi-line field
+- [Checkbox](docs/components/checkbox.md): one or more options
+- [Radio](docs/components/radio.md): exactly one option
+- [Switch](docs/components/switch.md): on/off setting applied immediately
+- [Chip](docs/components/chip.md): filters, tags, entered values
+- [Avatar](docs/components/avatar.md): person or entity
+- [Menu](docs/components/menu.md): floating list of actions
+- [Tabs](docs/components/tabs.md): switch between views
+- [Tooltip](docs/components/tooltip.md): short explanation on hover or focus
+- [Snackbar](docs/components/snackbar.md): brief confirmation
+
+## Optional
+
+- [Figma file](https://www.figma.com/design/P5KYJrEA2XqhVvwvI0IFgZ/Space-Design-System): source of truth
+- [Raw Figma export](tokens/figma/variables.json)
