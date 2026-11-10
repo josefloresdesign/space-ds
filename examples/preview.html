@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Space DS · Vista previa de tokens</title>
+<link rel="stylesheet" href="../css/styles.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-sans); background: var(--color-bg-canvas); color: var(--color-text-primary); }
+  main { max-width: 64rem; margin: 0 auto; padding: var(--space-10) var(--space-4); display: grid; gap: var(--space-10); }
+  header { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+  h1 { font-size: var(--text-heading-sm); line-height: var(--text-heading-sm--line-height); margin: 0; }
+  h2 { font-size: var(--text-title-sm); line-height: var(--text-title-sm--line-height); margin: 0 0 var(--space-4); }
+  p { color: var(--color-text-secondary); margin: 0; font-size: var(--text-body-md); line-height: var(--text-body-md--line-height); }
+  section { background: var(--color-bg-surface); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-card); padding: var(--space-6); box-shadow: var(--shadow-elevation-raised); }
+  .palette { display: grid; grid-template-columns: 6rem repeat(10, 1fr); gap: var(--space-1); align-items: center; font-size: var(--text-caption); color: var(--color-text-tertiary); }
+  .sw { height: var(--space-8); border-radius: var(--radius-sm); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+  .btn { font: inherit; font-weight: var(--font-weight-semibold); font-size: var(--text-body-md); height: var(--size-control-md); padding: 0 var(--space-4); border-radius: var(--radius-control); border: 1px solid transparent; cursor: pointer; transition: background var(--duration-base) var(--ease-standard); }
+  .btn.sm { height: var(--size-control-sm); font-size: var(--text-body-sm); padding: 0 var(--space-3); }
+  .btn.lg { height: var(--size-control-lg); font-size: var(--text-body-lg); padding: 0 var(--space-5); }
+  .solid { background: var(--color-action-primary-default); color: var(--color-text-on-action); }
+  .solid:hover { background: var(--color-action-primary-hover); }
+  .outline { background: transparent; color: var(--color-text-brand); border-color: var(--color-border-brand); }
+  .danger { background: var(--color-action-danger-default); color: var(--color-text-on-action); }
+  .btn:focus-visible { outline: none; box-shadow: var(--shadow-focus-ring); }
+  .type > * { margin: 0 0 var(--space-2); color: var(--color-text-primary); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--space-4); }
+  .tile { background: var(--color-bg-surface-raised); border-radius: var(--radius-lg); padding: var(--space-4); font-size: var(--text-body-sm); color: var(--color-text-secondary); height: 5rem; }
+  .chips { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .chip { font-size: var(--text-body-sm); padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Space DS · tokens</h1>
+      <p>Todo en esta página usa solo variables de <code>css/styles.css</code>.</p>
+    </div>
+    <button class="btn outline" id="mode">Cambiar a oscuro</button>
+  </header>
+
+  <section>
+    <h2>Colores primitivos</h2>
+    <div class="palette" id="palette"></div>
+  </section>
+
+  <section>
+    <h2>Colores semánticos (cambian en oscuro)</h2>
+    <div class="chips">
+      <span class="chip" style="background:var(--color-bg-brand-subtle);color:var(--color-text-brand)">brand</span>
+      <span class="chip" style="background:var(--color-bg-info-subtle);color:var(--color-text-link)">info</span>
+      <span class="chip" style="background:var(--color-bg-success-subtle);color:var(--color-text-success)">success</span>
+      <span class="chip" style="background:var(--color-bg-warning-subtle);color:var(--color-text-warning)">warning</span>
+      <span class="chip" style="background:var(--color-bg-danger-subtle);color:var(--color-text-danger)">danger</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Botones · alturas control sm 32 · md 40 · lg 48</h2>
+    <div class="row">
+      <button class="btn solid sm">Small</button>
+      <button class="btn solid">Medium</button>
+      <button class="btn solid lg">Large</button>
+      <button class="btn outline">Outline</button>
+      <button class="btn danger">Delete</button>
+    </div>
+    <p style="margin-top:var(--space-3)">Pulsa Tab para ver el focus ring.</p>
+  </section>
+
+  <section class="type">
+    <h2>Tipografía</h2>
+    <div id="type"></div>
+  </section>
+
+  <section>
+    <h2>Elevación</h2>
+    <div class="tiles">
+      <div class="tile" style="box-shadow:var(--shadow-elevation-raised)">raised</div>
+      <div class="tile" style="box-shadow:var(--shadow-elevation-sticky)">sticky</div>
+      <div class="tile" style="box-shadow:var(--shadow-elevation-overlay)">overlay</div>
+      <div class="tile" style="box-shadow:var(--shadow-elevation-dialog)">dialog</div>
+    </div>
+  </section>
+</main>
+<script>
+  const shades = [50,100,200,300,400,500,600,700,800,900];
+  const pal = document.getElementById('palette');
+  for (const p of ['primary','secondary','success','warning','danger','surface','neutral-dark']) {
+    pal.insertAdjacentHTML('beforeend', `<span>${p}</span>` + shades.map(s => `<div class="sw" title="${p}-${s}" style="background:var(--color-${p}-${s})"></div>`).join(''));
+  }
+  const type = document.getElementById('type');
+  for (const r of ['display','heading-xl','heading-md','heading-sm','title-md','title-sm','body-lg','body-md','body-sm','caption']) {
+    type.insertAdjacentHTML('beforeend', `<div style="font-size:var(--text-${r});line-height:var(--text-${r}--line-height);letter-spacing:var(--text-${r}--letter-spacing, 0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r} · El puente entre diseño y desarrollo</div>`);
+  }
+  const btn = document.getElementById('mode');
+  btn.onclick = () => {
+    const dark = document.documentElement.dataset.theme !== 'dark';
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    btn.textContent = dark ? 'Cambiar a claro' : 'Cambiar a oscuro';
+  };
+</script>
+</body>
+</html>
