@@ -1,0 +1,15 @@
+---
+import Icon from './Icon.astro';
+interface Props { label?: string; code: string; class?: string }
+const { label = 'terminal', code, class: cls = '' } = Astro.props;
+---
+<div class={`min-w-0 max-w-full rounded-card overflow-hidden bg-bg-contrast border border-border-subtle ${cls}`} data-code-block>
+  <div class="flex items-center justify-between px-4 py-2 border-b border-white/10">
+    <span class="text-body-sm text-text-on-contrast-secondary">{label}</span>
+    <button type="button" class="inline-flex items-center gap-1 text-body-sm text-text-on-contrast-secondary hover:text-text-on-contrast transition-colors duration-(--duration-fast)" data-copy aria-label={`Copy ${label} code`}>
+      <Icon name="copy" size={14} />
+      <span data-copy-label>Copy</span>
+    </button>
+  </div>
+  <pre class="p-4 overflow-x-auto text-[13px] leading-relaxed text-text-on-contrast" style="font-family:'IBM Plex Mono',ui-monospace,monospace"><code data-copy-source>{code}</code></pre>
+</div>

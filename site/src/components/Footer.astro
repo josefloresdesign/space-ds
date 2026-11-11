@@ -1,0 +1,34 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { LINKS, url } from '../lib/site';
+const cols = [
+  { title: 'Product', links: [['Docs', url('docs')], ['Components', url('components')], ['Get started', url('get-started')], ['Pricing', url('pricing')], ['Changelog', url('changelog')]] },
+  { title: 'Resources', links: [['Figma library', LINKS.figma], ['GitHub', LINKS.github], ['tokens.json', url('files/tokens.json')], ['llms.txt for AI', url('llms.txt')]] },
+  { title: 'Community', links: [['Report a bug', LINKS.issues], ['Request a component', LINKS.issues], ['Contribute', LINKS.github], ['José on LinkedIn', LINKS.linkedin]] },
+  { title: 'Legal', links: [['MIT License', url('license')], ['Terms of use', url('license#terms')], ['Privacy', url('license#privacy')]] },
+];
+---
+<footer class="bg-bg-contrast text-text-on-contrast">
+  <div class="container-site py-16 grid gap-12 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
+    <div class="flex flex-col gap-4 max-w-xs">
+      <a href={url()} aria-label="Space DS home"><Logo height={30} /></a>
+      <p class="text-body-md text-text-on-contrast-secondary">The bridge between design and development. Open source, free and customizable.</p>
+      <a href={LINKS.linkedin} class="inline-flex items-center gap-2 text-body-sm font-semibold hover:text-text-on-contrast-secondary transition-colors">
+        <Icon name="linkedin" size={18} /> Made by José Flores · LinkedIn
+      </a>
+    </div>
+    {cols.map(c => (
+      <div class="flex flex-col gap-3">
+        <p class="text-body-sm font-semibold">{c.title}</p>
+        <ul class="flex flex-col gap-3">
+          {c.links.map(([l, h]) => <li><a href={h} download={h.includes('/files/') ? '' : undefined} class="text-body-sm text-text-on-contrast-secondary hover:text-text-on-contrast transition-colors">{l}</a></li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <div class="container-site py-6 border-t border-white/10 flex flex-col sm:flex-row gap-2 justify-between text-body-sm text-text-on-contrast-secondary">
+    <p>© 2026 Space DS · Made by José Flores · MIT License</p>
+    <p>Public beta · Figma · Tailwind v4 · CSS</p>
+  </div>
+</footer>

@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { LINKS } from '../lib/site';
+---
+<Base title="License and terms" description="Space DS is released under the MIT license. Terms of use and privacy.">
+  <div class="container-site py-16 grid gap-12 lg:grid-cols-[14rem_1fr]">
+    <nav class="hidden lg:flex flex-col gap-1 sticky top-24 self-start" aria-label="Legal">
+      {[['MIT License', '#mit'], ['Terms of use', '#terms'], ['Privacy', '#privacy'], ['Brand and credits', '#brand']].map(([l, h]) => (
+        <a href={h} class="px-3 py-2 rounded-control text-body-md text-text-secondary hover:bg-action-neutral-subtle hover:text-text-primary">{l}</a>
+      ))}
+    </nav>
+    <div class="max-w-3xl flex flex-col gap-14">
+      <section id="mit" class="flex flex-col gap-5 scroll-mt-24">
+        <h1 class="text-heading-sm font-bold">MIT License</h1>
+        <p class="text-body-sm text-text-tertiary">Last updated: November 2026</p>
+        <div class="rounded-card bg-bg-brand-subtle p-6 flex flex-col gap-3">
+          <p class="text-body-md font-semibold text-text-brand">In short</p>
+          {['You can use, copy and modify it, including in commercial projects.', 'Keep the license notice in any code you distribute.', "It's provided as is, without warranty."].map(t => (
+            <p class="flex items-start gap-2 text-body-md"><Icon name="checkmark-circle" size={18} class="text-icon-brand mt-0.5" />{t}</p>
+          ))}
+        </div>
+        <h2 class="text-title-sm font-semibold">Full text</h2>
+        <div class="text-body-md text-text-secondary flex flex-col gap-4">
+          <p>Copyright (c) 2026 José Flores</p>
+          <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+          <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+          <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+        </div>
+      </section>
+      <section id="terms" class="flex flex-col gap-3 scroll-mt-24">
+        <h2 class="text-title-md font-semibold">Terms of use</h2>
+        <p class="text-body-md text-text-secondary">The Figma library, tokens, code and docs are covered by the MIT license above. This website is provided for information only. Community contributions (issues, pull requests) are accepted under the same license.</p>
+      </section>
+      <section id="privacy" class="flex flex-col gap-3 scroll-mt-24">
+        <h2 class="text-title-md font-semibold">Privacy</h2>
+        <p class="text-body-md text-text-secondary">This website has no accounts, forms or tracking cookies. Your light or dark mode choice is saved only in your own browser. The site is hosted on GitHub Pages and fonts load from Google Fonts, each under their own privacy policies.</p>
+      </section>
+      <section id="brand" class="flex flex-col gap-3 scroll-mt-24">
+        <h2 class="text-title-md font-semibold">Brand and credits</h2>
+        <p class="text-body-md text-text-secondary">Space DS and its logo are by José Flores. Icons are based on Ionicons (MIT). Typeface: IBM Plex Sans (SIL Open Font License).</p>
+        <a href={LINKS.linkedin} class="btn btn-outline btn-sm self-start"><Icon name="linkedin" />José on LinkedIn</a>
+      </section>
+    </div>
+  </div>
+</Base>

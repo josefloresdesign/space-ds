@@ -1,0 +1,110 @@
+@import "tailwindcss";
+/* Space DS tokens, straight from the repo: the site is the DS demo. */
+@import "../../../tailwind/theme.css";
+
+@layer base {
+  html {
+    background: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+  html[data-theme="light"] { color-scheme: light; }
+  body { min-height: 100dvh; }
+  ::selection { background: var(--color-alpha-primary-30); }
+  :focus-visible { outline: none; box-shadow: var(--shadow-focus-ring); border-radius: var(--radius-control); }
+}
+
+@layer components {
+  /* Buttons — same variants and sizes as the Figma component */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+    height: var(--size-control-md); padding-inline: var(--space-4);
+    border-radius: var(--radius-control); border: 1px solid transparent;
+    font-size: var(--text-body-md); line-height: 1; font-weight: var(--font-weight-semibold);
+    white-space: nowrap; cursor: pointer;
+    transition: background-color var(--duration-base) var(--ease-standard), border-color var(--duration-base) var(--ease-standard), color var(--duration-base) var(--ease-standard), transform var(--duration-fast) var(--ease-standard);
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-sm { height: var(--size-control-sm); padding-inline: var(--space-3); font-size: var(--text-body-sm); }
+  .btn-lg { height: var(--size-control-lg); padding-inline: var(--space-5); font-size: var(--text-body-lg); }
+  .btn-solid { background: var(--color-action-primary-default); color: var(--color-text-on-action); }
+  .btn-solid:hover { background: var(--color-action-primary-hover); }
+  .btn-outline { border-color: var(--color-border-brand); color: var(--color-text-brand); }
+  .btn-outline:hover { background: var(--color-action-primary-subtle); }
+  .btn-ghost { color: var(--color-text-brand); }
+  .btn-ghost:hover { background: var(--color-action-primary-subtle); }
+  .btn-neutral { color: var(--color-text-secondary); }
+  .btn-neutral:hover { background: var(--color-action-neutral-subtle); color: var(--color-text-primary); }
+  .btn-danger { background: var(--color-action-danger-default); color: var(--color-text-on-action); }
+  .btn-danger:hover { background: var(--color-action-danger-hover); }
+  .btn-icon { width: var(--size-control-md); padding: 0; }
+  .btn-icon.btn-sm { width: var(--size-control-sm); }
+
+  .card {
+    background: var(--color-bg-surface); border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-card);
+  }
+  .eyebrow { font-size: var(--text-caption); letter-spacing: 0.08em; font-weight: var(--font-weight-semibold); color: var(--color-text-brand); text-transform: uppercase; }
+  .container-site { width: 100%; max-width: 80rem; margin-inline: auto; padding-inline: var(--space-4); }
+  @media (min-width: 48rem) { .container-site { padding-inline: var(--space-10); } }
+
+  /* Docs typography (Markdown from /docs) */
+  .prose { color: var(--color-text-secondary); font-size: var(--text-body-md); line-height: 1.7; max-width: 46rem; }
+  .prose h1 { font-size: var(--text-heading-sm); line-height: 1.2; font-weight: var(--font-weight-bold); color: var(--color-text-primary); margin: 0 0 var(--space-4); letter-spacing: -0.01em; }
+  .prose h2 { font-size: var(--text-title-md); line-height: 1.35; font-weight: var(--font-weight-semibold); color: var(--color-text-primary); margin: var(--space-12) 0 var(--space-4); scroll-margin-top: 6rem; }
+  .prose h3 { font-size: var(--text-title-sm); font-weight: var(--font-weight-semibold); color: var(--color-text-primary); margin: var(--space-8) 0 var(--space-3); scroll-margin-top: 6rem; }
+  .prose p, .prose ul, .prose ol, .prose table, .prose pre, .prose blockquote { margin: 0 0 var(--space-4); }
+  .prose ul { list-style: disc; padding-left: var(--space-5); }
+  .prose ol { list-style: decimal; padding-left: var(--space-5); }
+  .prose li { margin-bottom: var(--space-1); }
+  .prose li::marker { color: var(--color-text-tertiary); }
+  .prose a { color: var(--color-text-link); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .prose strong { color: var(--color-text-primary); font-weight: var(--font-weight-semibold); }
+  .prose :not(pre) > code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.85em; background: var(--color-bg-surface-sunken); color: var(--color-text-primary); padding: 0.15em 0.4em; border-radius: var(--radius-sm); }
+  .prose pre { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; line-height: 1.6; padding: var(--space-4); border-radius: var(--radius-card); overflow-x: auto; border: 1px solid var(--color-border-subtle); }
+  .prose table { width: 100%; border-collapse: collapse; font-size: var(--text-body-sm); display: block; overflow-x: auto; }
+  .prose th { text-align: left; color: var(--color-text-tertiary); font-weight: var(--font-weight-semibold); background: var(--color-bg-surface-sunken); }
+  .prose th, .prose td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border-subtle); vertical-align: top; }
+  .prose blockquote { border-left: 2px solid var(--color-border-brand); padding-left: var(--space-4); color: var(--color-text-tertiary); }
+  .prose hr { border-color: var(--color-border-subtle); margin: var(--space-10) 0; }
+}
+
+/* ── Motion ─────────────────────────────────────────────────────── */
+@keyframes glow-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-40px, 30px) scale(1.08); }
+}
+@keyframes glow-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, -30px) scale(1.12); }
+}
+.glow { position: absolute; border-radius: 9999px; pointer-events: none; will-change: transform; }
+.glow-1 { animation: glow-drift 14s var(--ease-standard) infinite; }
+.glow-2 { animation: glow-drift-2 18s var(--ease-standard) infinite; }
+
+/* Scroll reveal — only when JS is on, so content is never hidden without it */
+.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity 700ms var(--ease-enter), transform 700ms var(--ease-enter); }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+.js .reveal[data-delay="1"] { transition-delay: 80ms; }
+.js .reveal[data-delay="2"] { transition-delay: 160ms; }
+.js .reveal[data-delay="3"] { transition-delay: 240ms; }
+.js .reveal[data-delay="4"] { transition-delay: 320ms; }
+
+.lift { transition: transform var(--duration-base) var(--ease-standard), box-shadow var(--duration-base) var(--ease-standard), border-color var(--duration-base) var(--ease-standard); }
+.lift:hover { transform: translateY(-4px); box-shadow: var(--shadow-elevation-overlay); border-color: var(--color-border-default); }
+
+.fade-swap { animation: fade-swap var(--duration-slow) var(--ease-enter); }
+@keyframes fade-swap { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+html.theme-anim, html.theme-anim * { transition: background-color var(--duration-slow) var(--ease-standard), color var(--duration-slow) var(--ease-standard), border-color var(--duration-slow) var(--ease-standard) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-1, .glow-2 { animation: none; }
+  .js .reveal { transform: none; transition: opacity 300ms linear; }
+  .lift:hover { transform: none; }
+  .fade-swap { animation: none; }
+  html { scroll-behavior: auto; }
+}

@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { LINKS, url } from '../lib/site';
+const compare = [
+  ['Price', '$0', '$100–300 per seat'],
+  ['Commercial use', 'Yes', 'Depends on license'],
+  ['Source code', 'Open on GitHub', 'Closed'],
+  ['Figma + code', 'Yes, same names', 'Sometimes'],
+  ['Docs for AI', 'Yes (llms.txt)', 'Rarely'],
+];
+const faqs = [
+  ['Is it really free?', 'Yes. Space DS is open source under the MIT license. There is no paid plan and nothing is locked.'],
+  ['Can I use it for client or commercial work?', 'Yes, the MIT license allows it. Just keep the license notice in your code.'],
+  ['Will it stay free?', 'Yes. The MIT license cannot be taken back for versions already released.'],
+  ['How do I request a component or report a bug?', 'Open an issue on GitHub. Community requests decide what comes next.'],
+];
+---
+<Base title="Pricing" description="Space DS is free forever: open source under the MIT license, including commercial use.">
+  <section class="relative overflow-hidden">
+    <div class="glow glow-1 -top-72 left-1/2 -translate-x-1/2 size-[36rem] bg-action-primary-default/40 blur-[200px]" aria-hidden="true"></div>
+    <div class="container-site relative py-20 md:py-28 flex flex-col items-center gap-10">
+      <div class="text-center flex flex-col items-center gap-3">
+        <p class="reveal eyebrow">Pricing</p>
+        <h1 class="reveal text-heading-sm md:text-heading-lg font-bold" data-delay="1">Free. Forever.</h1>
+        <p class="reveal text-body-lg text-text-secondary max-w-xl" data-delay="2">No pro plan, no expiring trial, no credit card. Use it in personal and commercial projects.</p>
+      </div>
+      <div class="reveal w-full max-w-4xl rounded-dialog border-2 border-border-brand bg-bg-surface p-6 md:p-10 grid gap-10 md:grid-cols-2 shadow-elevation-dialog" data-delay="3">
+        <div class="flex flex-col gap-4">
+          <span class="self-start rounded-full bg-bg-brand-subtle px-3 py-1 text-caption font-semibold text-text-brand">Open source · MIT</span>
+          <p class="flex items-end gap-2"><span class="text-heading-xl font-bold leading-none">$0</span><span class="text-body-lg text-text-secondary pb-2">/ forever</span></p>
+          <p class="text-body-md text-text-secondary">All of Space DS, for everyone.</p>
+          <div class="flex flex-wrap gap-3"><a href={url('get-started')} class="btn btn-solid btn-lg">Get started free</a><a href={url('license')} class="btn btn-ghost btn-lg">Read the license</a></div>
+        </div>
+        <ul class="flex flex-col gap-3">
+          <li class="text-body-md font-semibold">Includes</li>
+          {['Full Figma library with variables and modes', '13 components with variants and sizes', '361 tokens in CSS, Tailwind v4 and JSON', 'Light and dark mode', 'Markdown docs and llms.txt for AI', 'Commercial use allowed', 'Free updates'].map(t => (
+            <li class="flex items-center gap-2 text-body-md text-text-secondary"><Icon name="checkmark-circle" size={18} class="text-text-success" />{t}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-y border-border-subtle bg-bg-surface">
+    <div class="container-site py-20 grid gap-12 lg:grid-cols-2 items-start">
+      <div class="reveal flex flex-col gap-4">
+        <h2 class="text-heading-xs font-bold">Why is it free?</h2>
+        <p class="text-body-lg text-text-secondary">Space exists so designers and developers speak the same language. Charging for it would leave out small teams and people who are learning, the ones who need it most.</p>
+        <p class="text-body-lg text-text-secondary">The project lives on its community: every like, star and issue helps decide what comes next.</p>
+      </div>
+      <div class="reveal card overflow-hidden" data-delay="1">
+        <table class="w-full text-left text-body-md">
+          <thead class="bg-bg-surface-sunken text-body-sm text-text-tertiary"><tr><th class="p-4 font-semibold"><span class="sr-only">Feature</span></th><th class="p-4 font-semibold">Space DS</th><th class="p-4 font-semibold">Typical paid DS</th></tr></thead>
+          <tbody>{compare.map(([a, b, c]) => <tr class="border-t border-border-subtle"><th class="p-4 font-semibold text-body-sm">{a}</th><td class="p-4 text-text-brand">{b}</td><td class="p-4 text-text-secondary">{c}</td></tr>)}</tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-site py-20 flex flex-col items-center gap-10">
+    <h2 class="reveal text-heading-xs font-bold text-center">Found it useful? Here's how to help</h2>
+    <div class="grid gap-6 md:grid-cols-3 w-full">
+      {[['heart', 'Like it on Figma', 'Helps more people find it in the community.', 'Go to Figma', LINKS.figma], ['github', 'Star it on GitHub', 'Shows the project is alive and in real use.', 'Go to GitHub', LINKS.github], ['linkedin', 'Follow me on LinkedIn', 'New components, updates and behind the scenes of Space DS.', 'Follow José', LINKS.linkedin]].map(([ic, t, d, c, h], i) => (
+        <div class="reveal lift card p-6 flex flex-col gap-3" data-delay={String(i)}>
+          <span class="grid place-items-center size-10 rounded-control bg-bg-brand-subtle text-icon-brand"><Icon name={ic as any} size={20} /></span>
+          <h3 class="text-title-sm font-semibold">{t}</h3>
+          <p class="text-body-md text-text-secondary flex-1">{d}</p>
+          <a href={h} class="btn btn-outline btn-sm self-start">{c}</a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-site pb-24 flex flex-col items-center gap-8">
+    <h2 class="reveal text-heading-xs font-bold text-center">Frequently asked questions</h2>
+    <div class="reveal w-full max-w-3xl">
+      {faqs.map(([q, a], i) => (
+        <details class="group border-b border-border-subtle" open={i === 0}>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-body-lg">{q}<Icon name="chevron-down" size={18} class="text-icon-secondary transition-transform duration-(--duration-base) group-open:rotate-180" /></summary>
+          <p class="pb-5 text-body-md text-text-secondary">{a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,68 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { NAV, DOCS_NAV, LINKS, url } from '../lib/site';
+const path = Astro.url.pathname.replace(/\/$/, '');
+const isActive = (href: string) => path === href || (href.endsWith('/docs') && path.startsWith(href));
+const searchItems = [
+  ...NAV.map(n => ({ label: n.label, href: n.href, group: 'Pages' })),
+  ...DOCS_NAV.flatMap(g => g.items.map(i => ({ label: i.label, href: i.href, group: g.title }))),
+];
+---
+<header class="sticky top-0 z-(--z-sticky) border-b border-border-subtle bg-bg-canvas/80 backdrop-blur-md">
+  <nav class="container-site flex h-16 items-center justify-between gap-4" aria-label="Main">
+    <div class="flex items-center gap-10">
+      <a href={url()} class="text-text-primary" aria-label="Space DS home"><Logo height={30} /></a>
+      <ul class="hidden lg:flex items-center gap-6">
+        {NAV.map(n => (
+          <li><a href={n.href} class:list={['whitespace-nowrap text-body-md transition-colors duration-(--duration-fast)', isActive(n.href) ? 'text-text-primary font-semibold' : 'text-text-secondary hover:text-text-primary']} aria-current={isActive(n.href) ? 'page' : undefined}>{n.label}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div class="flex items-center gap-1">
+      <button type="button" data-search-open class="hidden md:flex items-center gap-2 h-control-sm w-56 px-3 rounded-control bg-bg-surface-sunken text-text-tertiary text-body-sm hover:text-text-secondary transition-colors" aria-label="Search docs">
+        <Icon name="search" />
+        <span class="flex-1 text-left">Search docs</span>
+        <kbd class="text-caption font-semibold px-1 rounded-sm border border-border-subtle bg-bg-surface">⌘K</kbd>
+      </button>
+      <button type="button" data-search-open class="md:hidden btn btn-neutral btn-icon" aria-label="Search docs"><Icon name="search" size={18} /></button>
+      <a href={LINKS.github} class="btn btn-neutral btn-icon" aria-label="Space DS on GitHub"><Icon name="github" size={18} /></a>
+      <button type="button" data-theme-toggle class="btn btn-neutral btn-icon" aria-label="Toggle light and dark mode">
+        <span class="theme-icon-dark"><Icon name="sunny" size={18} /></span>
+        <span class="theme-icon-light"><Icon name="moon" size={18} /></span>
+      </button>
+      <a href={url('get-started')} class="hidden sm:inline-flex btn btn-solid btn-sm ml-2">Get started free</a>
+      <button type="button" data-menu-toggle class="lg:hidden btn btn-neutral btn-icon" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><Icon name="menu" size={20} /></button>
+    </div>
+  </nav>
+  <div id="mobile-menu" class="lg:hidden hidden border-t border-border-subtle bg-bg-canvas">
+    <ul class="container-site py-4 flex flex-col">
+      {NAV.map(n => <li><a href={n.href} aria-current={isActive(n.href) ? 'page' : undefined} class:list={['block py-3 text-body-lg border-b border-border-subtle', isActive(n.href) ? 'text-text-brand font-semibold' : 'text-text-primary']}>{n.label}</a></li>)}
+      <li class="pt-4"><a href={url('get-started')} class="btn btn-solid btn-lg w-full">Get started free</a></li>
+    </ul>
+  </div>
+</header>
+
+<dialog id="search" class="m-auto mt-24 w-[min(36rem,calc(100%-2rem))] rounded-dialog bg-bg-surface-raised text-text-primary border border-border-subtle shadow-elevation-dialog p-0 backdrop:bg-bg-overlay backdrop:backdrop-blur-sm">
+  <div class="flex items-center gap-3 px-4 border-b border-border-subtle">
+    <Icon name="search" size={18} class="text-icon-secondary" />
+    <input type="search" data-search-input placeholder="Search components, foundations, pages…" class="h-14 flex-1 bg-transparent outline-none text-body-lg placeholder:text-text-tertiary" aria-label="Search" />
+    <kbd class="text-caption font-semibold px-1.5 rounded-sm border border-border-subtle text-text-tertiary">Esc</kbd>
+  </div>
+  <ul data-search-list class="max-h-96 overflow-y-auto p-2">
+    {searchItems.map(i => (
+      <li data-search-item data-text={`${i.label} ${i.group}`.toLowerCase()}>
+        <a href={i.href} class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-control hover:bg-action-neutral-subtle focus-visible:bg-action-neutral-subtle">
+          <span class="text-body-md text-text-primary">{i.label}</span>
+          <span class="text-body-sm text-text-tertiary">{i.group}</span>
+        </a>
+      </li>
+    ))}
+    <li data-search-empty class="hidden px-3 py-6 text-center text-body-md text-text-tertiary">No results. Try "button" or "color".</li>
+  </ul>
+</dialog>
+
+<style>
+  :global(html[data-theme="light"]) .theme-icon-dark { display: none; }
+  :global(html:not([data-theme="light"])) .theme-icon-light { display: none; }
+</style>

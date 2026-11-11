@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../lib/site';
+---
+<Base title="Page not found">
+  <section class="relative overflow-hidden">
+    <div class="glow glow-1 top-0 left-1/2 -translate-x-1/2 size-[30rem] bg-action-primary-default/40 blur-[180px]" aria-hidden="true"></div>
+    <div class="container-site relative py-28 flex flex-col items-center text-center gap-6">
+      <p class="reveal text-display font-bold text-text-brand leading-none">404</p>
+      <h1 class="reveal text-heading-xs md:text-heading-sm font-bold" data-delay="1">This page got lost in space</h1>
+      <p class="reveal text-body-lg text-text-secondary max-w-lg" data-delay="2">The link may be broken or the page may have moved. Search for what you need or head back home.</p>
+      <button type="button" data-search-open class="reveal flex items-center gap-2 h-control-lg w-full max-w-md px-4 rounded-control bg-bg-surface-sunken text-text-tertiary text-body-md" data-delay="3"><Icon name="search" size={18} />Search for a component or token…</button>
+      <div class="reveal flex flex-col sm:flex-row gap-3" data-delay="4"><a href={url()} class="btn btn-solid">Back to home</a><a href={url('components')} class="btn btn-outline">Browse components</a></div>
+    </div>
+  </section>
+</Base>

@@ -109,7 +109,10 @@ for (const it of items('layout')) {
 
 // ── salida CSS ──────────────────────────────────────────────────────
 const block = (sel, list, indent = '  ') => `${sel} {\n${list.map(([k, v]) => `${indent}${k}: ${v};`).join('\n')}\n}`;
+// Light values again under [data-theme="light"], so a section can force light mode inside a dark page.
+const light = items('theme').filter(it => it.values[1] !== it.values[0]).map(it => [lookup[it.name], value('theme', it.type, it.values[0])]);
 const darkCss = [
+  block('[data-theme="light"]', light),
   block('[data-theme="dark"]', dark),
   `@media (prefers-color-scheme: dark) {\n${block('  :root:not([data-theme="light"])', dark, '    ').replace(/\n}$/, '\n  }')}\n}`,
 ].join('\n\n');

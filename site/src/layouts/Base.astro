@@ -1,0 +1,151 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+interface Props { title: string; description?: string }
+const { title, description = 'Space DS is a free, open source design system with the same token names in Figma and code, for Tailwind CSS v4 and plain CSS, in light and dark mode.' } = Astro.props;
+const fullTitle = title === 'Space DS' ? 'Space DS · Open source design system' : `${title} · Space DS`;
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#111418" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}/favicon.svg`.replace('//','/')} />
+    <link rel="alternate" type="text/plain" title="llms.txt" href={`${import.meta.env.BASE_URL}/llms.txt`.replace('//','/')} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <script is:inline>
+      // Before paint: theme (dark by default) and the "js" flag for reveal animations.
+      (function () {
+        var d = document.documentElement;
+        try { var t = localStorage.getItem('theme'); if (t) d.dataset.theme = t; } catch (e) {}
+        d.classList.add('js');
+      })();
+      document.addEventListener('astro:after-swap', function () {
+        var d = document.documentElement;
+        try { var t = localStorage.getItem('theme'); if (t) d.dataset.theme = t; } catch (e) {}
+        d.classList.add('js');
+      });
+    </script>
+    <ClientRouter />
+  </head>
+  <body class="flex flex-col">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-(--z-toast) btn btn-solid">Skip to content</a>
+    <Navbar />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      function init() {
+        // Scroll reveal
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+        document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => {
+          // Above the fold: show right away (still animates via CSS); below: wait for scroll.
+          if (el.getBoundingClientRect().top < innerHeight) el.classList.add('is-visible');
+          else io.observe(el);
+        });
+
+        // External links open in a new tab (with a note for screen readers)
+        document.querySelectorAll<HTMLAnchorElement>('a[href^="http"], a[href$="llms.txt"]').forEach(a => {
+          if (a.dataset.ext || (a.host === location.host && !a.pathname.endsWith('llms.txt'))) return;
+          a.dataset.ext = '1'; a.target = '_blank'; a.rel = 'noopener noreferrer';
+          a.insertAdjacentHTML('beforeend', '<span class="sr-only"> (opens in a new tab)</span>');
+        });
+
+        // Copy buttons
+        document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach(btn => {
+          if (btn.dataset.bound) return; btn.dataset.bound = '1';
+          btn.addEventListener('click', async () => {
+            const src = btn.closest('[data-code-block]')?.querySelector('[data-copy-source]');
+            const label = btn.querySelector('[data-copy-label]');
+            if (!src) return;
+            try { await navigator.clipboard.writeText(src.textContent || ''); } catch {}
+            if (label) { label.textContent = 'Copied ✓'; setTimeout(() => (label.textContent = 'Copy'), 1500); }
+          });
+        });
+
+        // Theme toggle (smooth)
+        document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach(btn => {
+          if (btn.dataset.bound) return; btn.dataset.bound = '1';
+          btn.addEventListener('click', () => {
+            const d = document.documentElement;
+            const next = d.dataset.theme === 'light' ? 'dark' : 'light';
+            d.classList.add('theme-anim');
+            d.dataset.theme = next;
+            try { localStorage.setItem('theme', next); } catch {}
+            setTimeout(() => d.classList.remove('theme-anim'), 400);
+          });
+        });
+
+        // Mobile menu
+        const menuBtn = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+        const menu = document.getElementById('mobile-menu');
+        if (menuBtn && menu && !menuBtn.dataset.bound) {
+          menuBtn.dataset.bound = '1';
+          menuBtn.addEventListener('click', () => {
+            const open = menu.classList.toggle('hidden') === false;
+            menuBtn.setAttribute('aria-expanded', String(open));
+          });
+        }
+        menu?.classList.add('hidden'); menuBtn?.setAttribute('aria-expanded', 'false');
+
+        // Search (⌘K)
+        const dlg = document.getElementById('search') as HTMLDialogElement | null;
+        const input = dlg?.querySelector<HTMLInputElement>('[data-search-input]');
+        document.querySelectorAll<HTMLButtonElement>('[data-search-open]').forEach(b => {
+          if (b.dataset.bound) return; b.dataset.bound = '1';
+          b.addEventListener('click', () => { dlg?.showModal(); input?.focus(); });
+        });
+        if (input && !input.dataset.bound) {
+          input.dataset.bound = '1';
+          input.addEventListener('input', () => {
+            const q = input.value.trim().toLowerCase(); let shown = 0;
+            dlg!.querySelectorAll<HTMLElement>('[data-search-item]').forEach(li => { const ok = !q || (li.dataset.text || '').includes(q); li.hidden = !ok; if (ok) shown++; });
+            dlg!.querySelector('[data-search-empty]')?.classList.toggle('hidden', shown > 0);
+          });
+          dlg!.addEventListener('click', (e) => { if (e.target === dlg) dlg!.close(); });
+          dlg!.querySelectorAll('a').forEach(a => a.addEventListener('click', () => dlg!.close()));
+        }
+
+        // Tabs / path selector
+        document.querySelectorAll<HTMLElement>('[data-tabs]').forEach(group => {
+          if (group.dataset.bound) return; group.dataset.bound = '1';
+          const tabs = group.querySelectorAll<HTMLElement>('[data-tab]');
+          const select = (id: string) => {
+            tabs.forEach(t => { const on = t.dataset.tab === id; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
+            group.querySelectorAll<HTMLElement>('[data-panel]').forEach(p => { const on = p.dataset.panel === id; p.hidden = !on; if (on) { p.classList.remove('fade-swap'); void p.offsetWidth; p.classList.add('fade-swap'); } });
+            group.querySelectorAll<HTMLElement>('[data-panel-extra]').forEach(p => { p.hidden = p.dataset.panelExtra !== id; });
+          };
+          tabs.forEach((t, i) => {
+            t.addEventListener('click', () => select(t.dataset.tab!));
+            t.addEventListener('keydown', (e) => {
+              const k = (e as KeyboardEvent).key; if (k !== 'ArrowRight' && k !== 'ArrowLeft') return;
+              const n = tabs[(i + (k === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; n.focus(); select(n.dataset.tab!);
+            });
+          });
+        });
+
+        // Demo switches
+        document.querySelectorAll<HTMLButtonElement>('[role="switch"][data-demo]').forEach(s => {
+          if (s.dataset.bound) return; s.dataset.bound = '1';
+          s.addEventListener('click', () => s.setAttribute('aria-checked', String(s.getAttribute('aria-checked') !== 'true')));
+        });
+      }
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); const d = document.getElementById('search') as HTMLDialogElement | null; d?.showModal(); d?.querySelector('input')?.focus(); }
+      });
+      document.addEventListener('astro:page-load', init);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import { LINKS, url } from '../lib/site';
+
+const paths = [
+  { id: 'figma', icon: 'figma', title: 'Figma', desc: 'Duplicate the library and design with components and variables.', cta: 'Open in Figma', href: LINKS.figma,
+    steps: [['Open the library', 'Duplicate Space DS from Figma into your drafts.'], ['Use the components', 'Drag them from the Assets panel. Variables and modes come included.'], ['Switch light and dark', 'Change the theme mode on any frame and everything adapts.']],
+    code: [] },
+  { id: 'tailwind', icon: 'code', title: 'Tailwind CSS', desc: 'Import the theme and use classes like bg-bg-surface or h-control-md.', cta: 'See setup', href: url('get-started#tailwind'),
+    steps: [['Download the theme', 'theme.css from GitHub or the CDN link.'], ['Import it', 'Right after @import "tailwindcss" in your main CSS.'], ['Use the classes', 'Names match what you see in Figma.']],
+    code: [['main.css', '@import "tailwindcss";\n@import "./space-ds/theme.css";'], ['index.html', '<button class="h-control-md px-4 rounded-control\n  bg-action-primary-default text-text-on-action">\n  Save\n</button>']] },
+  { id: 'css', icon: 'css', title: 'Plain CSS', desc: 'One file of variables. No build step, no dependencies.', cta: 'Copy link for your HTML', href: url('get-started#css'),
+    steps: [['Add one line', 'Link the stylesheet in your <head>.'], ['Use the variables', 'var(--color-bg-surface), var(--space-4), var(--radius-card)…'], ['Dark mode is automatic', 'Or force it with data-theme="dark" on <html>.']],
+    code: [['index.html', `<link rel="stylesheet"\n  href="${LINKS.cdnCss}">`], ['styles.css', '.card {\n  background: var(--color-bg-surface);\n  border-radius: var(--radius-card);\n  padding: var(--space-4);\n}']] },
+  { id: 'tokens', icon: 'download', title: 'Tokens JSON', desc: 'Every token in a standard format for React and other tools.', cta: 'Download tokens.json', href: url('files/tokens.json'),
+    steps: [['Download tokens.json', 'All 361 tokens in the W3C design tokens (DTCG) format.'], ['Plug it into your tools', 'Style Dictionary, Tokens Studio or your own build.'], ['Keep it in sync', 'It is generated from Figma, so it never drifts.']],
+    code: [['tokens.json', '"bg": {\n  "surface": {\n    "$type": "color",\n    "$value": "{primitives.surface.50}"\n  }\n}']] },
+  { id: 'ai', icon: 'sparkles', title: 'With AI', desc: 'Give your AI the Space rules and generate UI with your components.', cta: 'Use with Claude or ChatGPT', href: url('llms.txt'),
+    steps: [['Share llms.txt', 'It tells the AI what Space DS is and where every doc lives.'], ['Ask for UI', 'The AI uses your tokens and components instead of random colors.'], ['Paste and ship', 'The output uses the same names as Figma.']],
+    code: [['prompt', 'Use Space DS (https://josefloresdesign.github.io/space-ds/llms.txt).\nBuild a settings page with tabs, switches\nand a Save button. Use only Space tokens.']] },
+];
+const features = [
+  ['figma', 'Same names everywhere', 'primary/500 in Figma is --color-primary-500 in CSS and bg-primary-500 in Tailwind.'],
+  ['moon', 'Light and dark included', 'Semantic colors switch on their own. Your components need no dark: classes.'],
+  ['checkmark-circle', 'Accessible from the start', 'AA contrast, visible focus and touch-friendly sizes in every component.'],
+  ['palette', '100% customizable', 'Change your brand by editing tokens, not components. One color and everything updates.'],
+  ['code', 'Tailwind v4 and plain CSS', 'Pick your stack. Same result with or without a build step.'],
+  ['sparkles', 'AI-ready', 'llms.txt and Markdown docs so Claude or ChatGPT can build UI with your DS.'],
+] as const;
+const faqs = [
+  ['Is it really free?', 'Yes. Space DS is open source under the MIT license. There is no paid plan and nothing is locked.'],
+  ['Can I use it for client or commercial work?', 'Yes, the MIT license allows it. Just keep the license notice in your code.'],
+  ['Do I need to know React?', 'No. Use it only in Figma, with plain CSS or with Tailwind. React support will come later.'],
+  ['How do I apply my brand colors?', 'Change the primitive tokens (for example primary) in Figma or in the CSS. Components update on their own.'],
+  ['How do I request a component or report a bug?', 'Open an issue on GitHub. Community requests decide what comes next.'],
+];
+---
+<Base title="Space DS">
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-bg-canvas">
+    <div class="glow glow-1 -top-64 -right-48 size-[26rem] blur-[140px] opacity-60 md:-top-[26rem] md:-right-56 md:size-[52rem] md:blur-[300px] md:opacity-90 bg-action-primary-default" aria-hidden="true"></div>
+    <div class="glow glow-2 -bottom-48 -left-40 size-[22rem] blur-[140px] md:-bottom-72 md:-left-64 md:size-[40rem] md:blur-[260px] bg-action-info-default/10" aria-hidden="true"></div>
+    <div class="container-site relative flex flex-col items-center text-center gap-6 pt-24 pb-20 md:pt-32 md:pb-28">
+      <a href={url('changelog')} class="reveal inline-flex items-center gap-2 rounded-full bg-bg-brand-subtle px-3 py-1 text-body-sm font-semibold text-text-brand hover:opacity-90">
+        <span class="rounded-full bg-action-primary-default px-2 text-caption text-text-on-action">New</span>
+        Public beta · Tailwind v4 tokens and dark mode
+        <Icon name="arrow" size={14} />
+      </a>
+      <h1 class="reveal text-heading-md md:text-heading-xl font-bold tracking-tight max-w-4xl" data-delay="1">The bridge between<br class="hidden sm:block" /> design and development</h1>
+      <p class="reveal text-body-lg md:text-body-xl text-text-secondary max-w-2xl" data-delay="2">An open source design system with the same names in Figma and in code. Design, copy and build with tokens for Tailwind and CSS, in light and dark mode.</p>
+      <div class="reveal flex flex-col sm:flex-row gap-3 w-full sm:w-auto" data-delay="3">
+        <a href="#choose" class="btn btn-solid btn-lg">Get started free</a>
+        <a href={url('components')} class="btn btn-outline btn-lg">Browse components</a>
+      </div>
+      <ul class="reveal flex flex-wrap justify-center gap-x-6 gap-y-2 text-body-sm text-text-secondary" data-delay="4">
+        {['100% free', 'MIT open source', '10k+ Figma downloads', 'WCAG AA accessible'].map(t => <li class="inline-flex items-center gap-1.5"><Icon name="checkmark-circle" class="text-text-success" />{t}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- CHOOSE YOUR PATH -->
+  <section id="choose" class="border-y border-border-subtle bg-bg-surface scroll-mt-16">
+    <div class="container-site py-20 flex flex-col gap-10" data-tabs>
+      <div class="reveal text-center flex flex-col items-center gap-3">
+        <p class="eyebrow">Start here</p>
+        <h2 class="text-heading-xs md:text-heading-md font-bold">How do you want to use Space?</h2>
+        <p class="text-body-lg text-text-secondary max-w-xl">Pick your path. They all share the same tokens, so design and code never drift apart.</p>
+      </div>
+      <div role="tablist" aria-label="Ways to use Space" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        {paths.map((p, i) => (
+          <button type="button" role="tab" data-tab={p.id} aria-selected={p.id === 'tailwind' ? 'true' : 'false'} tabindex={p.id === 'tailwind' ? 0 : -1} aria-controls={`panel-${p.id}`}
+            class="reveal lift card group text-left p-5 flex flex-col gap-3 aria-selected:border-border-brand aria-selected:bg-bg-brand-subtle aria-selected:shadow-elevation-raised" data-delay={String(i % 5)}>
+            <span class="grid place-items-center size-10 rounded-control bg-bg-brand-subtle text-icon-brand group-aria-selected:bg-action-primary-default group-aria-selected:text-text-on-action transition-colors"><Icon name={p.icon as any} size={20} /></span>
+            <span class="text-title-sm font-semibold">{p.title}</span>
+            <span class="text-body-sm text-text-secondary">{p.desc}</span>
+          </button>
+        ))}
+      </div>
+      {paths.map(p => (
+        <div id={`panel-${p.id}`} role="tabpanel" data-panel={p.id} hidden={p.id !== 'tailwind'} class="card p-6 md:p-10 grid gap-10 lg:grid-cols-2 items-start">
+          <div class="flex flex-col gap-5 min-w-0">
+            <h3 class="text-title-md font-semibold">{p.title}: {p.id === 'figma' ? 'start designing' : p.id === 'ai' ? 'build with your AI' : 'get set up'} in 3 steps</h3>
+            <ol class="flex flex-col gap-4">
+              {p.steps.map(([t, d], i) => (
+                <li class="flex gap-3">
+                  <span class="grid place-items-center size-7 shrink-0 rounded-full bg-bg-brand-subtle text-body-sm font-semibold text-text-brand">{i + 1}</span>
+                  <span><span class="block text-body-md font-semibold">{t}</span><span class="block text-body-sm text-text-secondary">{d}</span></span>
+                </li>
+              ))}
+            </ol>
+            <div class="flex flex-wrap gap-3">
+              <a href={p.href} class="btn btn-solid">{p.cta}</a>
+              <a href={url('get-started')} class="btn btn-ghost">Full guide</a>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3 min-w-0">
+            {p.code.length ? p.code.map(([l, c]) => <CodeBlock label={l} code={c} />) : (
+              <div class="rounded-card border border-border-subtle bg-bg-surface-sunken p-8 flex flex-col items-center text-center gap-3">
+                <span class="grid place-items-center size-14 rounded-card bg-action-primary-default text-text-on-action"><Icon name="figma" size={28} /></span>
+                <p class="text-body-md text-text-secondary max-w-xs">Components, variables, light and dark modes, all in one Figma library.</p>
+                <a href={LINKS.figma} class="btn btn-outline btn-sm">Open the library</a>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- PREVIEW LIGHT / DARK -->
+  <section class="container-site py-20 md:py-28 flex flex-col items-center gap-10">
+    <div class="reveal text-center flex flex-col items-center gap-3">
+      <p class="eyebrow">Components</p>
+      <h2 class="text-heading-xs md:text-heading-md font-bold">Ready to use, in light and dark</h2>
+      <p class="text-body-lg text-text-secondary max-w-xl">The same components in both modes. Switch the theme and everything adapts, no extra classes. Try the switches.</p>
+    </div>
+    <div class="grid gap-6 lg:grid-cols-2 w-full">
+      {['light', 'dark'].map((mode, i) => (
+        <div data-theme={mode} class="reveal rounded-dialog border border-border-subtle bg-bg-surface text-text-primary p-6 md:p-8 flex flex-col gap-6" data-delay={String(i + 1)}>
+          <div class="flex items-center justify-between">
+            <p class="text-title-sm font-semibold">Account settings</p>
+            <span class="rounded-full bg-bg-brand-subtle px-2 py-1 text-caption font-semibold text-text-brand">{mode === 'light' ? 'Light mode' : 'Dark mode'}</span>
+          </div>
+          <div role="tablist" class="flex border-b border-border-subtle">
+            {['Profile', 'Notifications', 'Team'].map((t, j) => (
+              <span class:list={['flex-1 text-center h-control-md grid place-items-center text-body-md -mb-px', j === 0 ? 'border-b-2 border-action-primary-default text-text-brand' : 'text-text-secondary']}>{t}</span>
+            ))}
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="grid place-items-center size-avatar-lg rounded-full bg-action-primary-default text-text-on-action text-body-sm font-semibold">JF</span>
+            <span><span class="block text-body-md font-semibold">José Flores</span><span class="block text-body-sm text-text-secondary">Product designer</span></span>
+          </div>
+          <label class="flex flex-col gap-1">
+            <span class="text-body-sm font-semibold">Email <span class="font-regular text-text-tertiary">(optional)</span></span>
+            <input value="jose@spaceds.dev" class="h-control-md px-3 rounded-control bg-bg-surface border border-border-default text-body-md focus:outline-none focus:border-border-focus focus:shadow-focus-ring" />
+            <span class="text-body-sm text-text-secondary">We only use it for account notices.</span>
+          </label>
+          {[['Email notifications', true], ['Weekly digest', false]].map(([l, on]) => (
+            <div class="flex items-center justify-between">
+              <span class="text-body-md">{l}</span>
+              <button type="button" role="switch" data-demo aria-checked={on ? 'true' : 'false'} aria-label={String(l)}
+                class="group inline-flex items-center w-9 h-5 p-0.5 rounded-full bg-action-neutral-subtle-pressed aria-checked:bg-action-primary-default transition-colors duration-(--duration-fast) ease-standard">
+                <span class="size-4 rounded-full bg-icon-on-action shadow-xs transition-transform duration-(--duration-fast) ease-standard group-aria-checked:translate-x-4"></span>
+              </button>
+            </div>
+          ))}
+          <div class="flex gap-2">
+            <span class="inline-flex items-center gap-1 h-chip-md px-3 rounded-full bg-action-primary-default text-text-on-action text-body-sm"><Icon name="checkmark" size={14} />Design</span>
+            <span class="inline-flex items-center h-chip-md px-3 rounded-full border border-border-default text-body-sm">Code</span>
+            <span class="inline-flex items-center h-chip-md px-3 rounded-full border border-border-default text-body-sm">Product</span>
+          </div>
+          <div class="flex justify-end gap-2">
+            <button type="button" class="btn btn-ghost">Cancel</button>
+            <button type="button" class="btn btn-solid">Save changes</button>
+          </div>
+        </div>
+      ))}
+    </div>
+    <a href={url('components')} class="reveal btn btn-outline">See all components</a>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="border-y border-border-subtle bg-bg-surface">
+    <div class="container-site py-20 md:py-28 flex flex-col gap-10">
+      <div class="reveal text-center flex flex-col items-center gap-3">
+        <p class="eyebrow">Why Space</p>
+        <h2 class="text-heading-xs md:text-heading-md font-bold max-w-2xl">Design and code speak the same language</h2>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {features.map(([ic, t, d], i) => (
+          <div class="reveal lift card p-6 flex flex-col gap-3" data-delay={String(i % 3)}>
+            <span class="grid place-items-center size-10 rounded-control bg-bg-brand-subtle text-icon-brand"><Icon name={ic} size={20} /></span>
+            <h3 class="text-title-sm font-semibold">{t}</h3>
+            <p class="text-body-md text-text-secondary">{d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="container-site py-16 grid grid-cols-2 lg:grid-cols-4 gap-8">
+    {[['10k+', 'downloads on Figma Community'], ['361', 'tokens in Figma and code'], ['13', 'documented components'], ['$0', 'forever · MIT license']].map(([n, l], i) => (
+      <div class="reveal text-center" data-delay={String(i)}>
+        <p class="text-heading-sm font-bold text-text-brand">{n}</p>
+        <p class="text-body-md text-text-secondary">{l}</p>
+      </div>
+    ))}
+  </section>
+
+  <!-- PRICING -->
+  <section class="border-y border-border-subtle bg-bg-surface">
+    <div class="container-site py-20 md:py-28 flex flex-col items-center gap-10">
+      <div class="reveal text-center flex flex-col items-center gap-3">
+        <p class="eyebrow">Pricing</p>
+        <h2 class="text-heading-xs md:text-heading-md font-bold">Free. Forever.</h2>
+        <p class="text-body-lg text-text-secondary max-w-xl">No pro plan, no expiring trial, no credit card. Use it in personal and commercial projects.</p>
+      </div>
+      <div class="reveal w-full max-w-4xl rounded-dialog border-2 border-border-brand bg-bg-canvas p-6 md:p-10 grid gap-10 md:grid-cols-2">
+        <div class="flex flex-col gap-4">
+          <span class="self-start rounded-full bg-bg-brand-subtle px-3 py-1 text-caption font-semibold text-text-brand">Open source · MIT</span>
+          <p class="flex items-end gap-2"><span class="text-heading-xl font-bold leading-none">$0</span><span class="text-body-lg text-text-secondary pb-2">/ forever</span></p>
+          <p class="text-body-md text-text-secondary">All of Space DS, for everyone.</p>
+          <div class="flex flex-wrap gap-3"><a href="#choose" class="btn btn-solid btn-lg">Get started free</a><a href={url('license')} class="btn btn-ghost btn-lg">Read the license</a></div>
+        </div>
+        <ul class="flex flex-col gap-3">
+          <li class="text-body-md font-semibold">Includes</li>
+          {['Full Figma library with variables and modes', '13 components with variants and sizes', '361 tokens in CSS, Tailwind v4 and JSON', 'Light and dark mode', 'Markdown docs and llms.txt for AI', 'Commercial use allowed', 'Free updates'].map(t => (
+            <li class="flex items-center gap-2 text-body-md text-text-secondary"><Icon name="checkmark-circle" size={18} class="text-text-success" />{t}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="container-site py-20 md:py-28 flex flex-col items-center gap-10">
+    <h2 class="reveal text-heading-xs md:text-heading-md font-bold text-center">Frequently asked questions</h2>
+    <div class="reveal w-full max-w-3xl">
+      {faqs.map(([q, a], i) => (
+        <details class="group border-b border-border-subtle" open={i === 0}>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-body-lg">
+            {q}
+            <Icon name="chevron-down" size={18} class="text-icon-secondary transition-transform duration-(--duration-base) group-open:rotate-180" />
+          </summary>
+          <p class="pb-5 text-body-md text-text-secondary">{a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="container-site pb-20 md:pb-28">
+    <div class="reveal relative overflow-hidden rounded-dialog bg-bg-brand-subtle px-6 py-16 text-center flex flex-col items-center gap-5">
+      <div class="glow glow-2 -top-40 left-1/2 size-[30rem] bg-action-primary-default/30 blur-[160px]" aria-hidden="true"></div>
+      <h2 class="relative text-heading-xs md:text-heading-sm font-bold max-w-2xl">Design today, build tomorrow with the same names</h2>
+      <p class="relative text-body-lg text-text-secondary">Choose how you want to start. It takes less than 5 minutes.</p>
+      <div class="relative flex flex-col sm:flex-row gap-3"><a href={LINKS.figma} class="btn btn-solid btn-lg">Open in Figma</a><a href={url('get-started')} class="btn btn-outline btn-lg">Install with Tailwind</a></div>
+    </div>
+  </section>
+</Base>

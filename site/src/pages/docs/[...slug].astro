@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { DOCS_NAV, LINKS, url } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  return docs.map(entry => ({ params: { slug: entry.id === 'readme' ? undefined : entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const title = headings.find(h => h.depth === 1)?.text ?? 'Docs';
+const toc = headings.filter(h => h.depth === 2);
+const here = Astro.url.pathname.replace(/\/$/, '');
+const flat = DOCS_NAV.flatMap(g => g.items).filter(i => i.href.includes('/docs'));
+const idx = flat.findIndex(i => i.href === here);
+const prev = idx > 0 ? flat[idx - 1] : null;
+const next = idx >= 0 && idx < flat.length - 1 ? flat[idx + 1] : null;
+const section = entry.id.startsWith('components/') ? 'Components' : entry.id.startsWith('foundations/') ? 'Foundations' : null;
+const sourcePath = entry.id === 'readme' ? 'README.md' : `${entry.id}.md`;
+---
+<Base title={title}>
+  <div class="container-site grid gap-10 lg:grid-cols-[15rem_1fr] xl:grid-cols-[15rem_1fr_13rem] py-10">
+    <aside class="hidden lg:block">
+      <nav class="sticky top-24 max-h-[calc(100dvh-8rem)] overflow-y-auto pr-2 flex flex-col gap-6" aria-label="Docs">
+        {DOCS_NAV.map(g => (
+          <div class="flex flex-col gap-1">
+            <p class="eyebrow text-text-tertiary! mb-1">{g.title}</p>
+            {g.items.map(i => {
+              const on = i.href === here;
+              return <a href={i.href} aria-current={on ? 'page' : undefined} class:list={['px-3 py-1.5 rounded-control text-body-md transition-colors', on ? 'bg-bg-brand-subtle text-text-brand font-semibold' : 'text-text-secondary hover:text-text-primary hover:bg-action-neutral-subtle']}>{i.label}</a>;
+            })}
+          </div>
+        ))}
+      </nav>
+    </aside>
+
+    <article class="min-w-0">
+      <p class="text-body-sm text-text-tertiary mb-4"><a href={url('docs')} class="hover:text-text-secondary">Docs</a>{section && <> / {section}</>}</p>
+      <div class="flex flex-wrap gap-2 mb-8">
+        <a href={LINKS.figma} class="btn btn-outline btn-sm"><Icon name="figma" />View in Figma</a>
+        <a href={`${LINKS.github}/blob/main/docs/${sourcePath}`} class="btn btn-neutral btn-sm"><Icon name="github" />Edit on GitHub</a>
+      </div>
+      <div class="prose fade-swap"><Content /></div>
+      {(prev || next) && (
+        <nav class="mt-16 pt-6 border-t border-border-subtle flex justify-between gap-4" aria-label="Previous and next">
+          {prev ? <a href={prev.href} class="group flex flex-col"><span class="text-body-sm text-text-tertiary">Previous</span><span class="text-body-md font-semibold text-text-brand group-hover:underline">{prev.label}</span></a> : <span />}
+          {next && <a href={next.href} class="group flex flex-col text-right"><span class="text-body-sm text-text-tertiary">Next</span><span class="text-body-md font-semibold text-text-brand group-hover:underline">{next.label}</span></a>}
+        </nav>
+      )}
+    </article>
+
+    {toc.length > 0 && (
+      <aside class="hidden xl:block">
+        <nav class="sticky top-24 flex flex-col gap-2" aria-label="On this page">
+          <p class="eyebrow text-text-tertiary! mb-1">On this page</p>
+          {toc.map(h => <a href={`#${h.slug}`} class="text-body-sm text-text-secondary hover:text-text-primary">{h.text}</a>)}
+          <a href={LINKS.issues} class="mt-6 text-body-sm text-text-link">Something unclear? Tell us</a>
+        </nav>
+      </aside>
+    )}
+  </div>
+</Base>

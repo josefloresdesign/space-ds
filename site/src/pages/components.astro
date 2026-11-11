@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { COMPONENTS, LINKS, url } from '../lib/site';
+const groups = ['All', 'Actions', 'Forms', 'Navigation', 'Feedback', 'Data'];
+---
+<Base title="Components" description="13 Space DS components with variants, sizes and dark mode, each documented with Tailwind and CSS examples.">
+  <section class="container-site pt-16 pb-10 flex flex-col gap-4">
+    <h1 class="reveal text-heading-sm md:text-heading-md font-bold">Components</h1>
+    <p class="reveal text-body-lg md:text-body-xl text-text-secondary max-w-3xl" data-delay="1">13 components with variants, sizes and dark mode. Each has its own doc with Tailwind and CSS examples.</p>
+    <div class="reveal flex flex-wrap gap-2" data-delay="2" role="group" aria-label="Filter by category" data-filter>
+      {groups.map((g, i) => (
+        <button type="button" data-group={g} aria-pressed={i === 0 ? 'true' : 'false'}
+          class="h-chip-md px-3 rounded-full text-body-sm border border-border-default text-text-primary hover:bg-action-neutral-hover aria-pressed:bg-action-primary-default aria-pressed:border-transparent aria-pressed:text-text-on-action transition-colors">{g}</button>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-site pb-24 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-grid>
+    {COMPONENTS.map((c, i) => (
+      <a href={url(`docs/components/${c.slug}`)} data-cat={c.group} class="reveal lift card overflow-hidden flex flex-col" data-delay={String(i % 4)}>
+        <div class="h-44 grid place-items-center bg-bg-canvas border-b border-border-subtle px-4" aria-hidden="true">
+          {c.slug === 'button' && <span class="btn btn-solid">Save</span>}
+          {c.slug === 'input' && <span class="h-control-md w-48 px-3 rounded-control border border-border-default bg-bg-surface flex items-center text-body-md text-text-tertiary">Placeholder</span>}
+          {c.slug === 'text-area' && <span class="h-24 w-52 p-3 rounded-control border border-border-default bg-bg-surface text-body-sm text-text-tertiary">Tell us what happened…</span>}
+          {c.slug === 'checkbox' && <span class="flex items-center gap-2 text-body-md"><span class="grid place-items-center size-5 rounded-sm bg-action-primary-default text-text-on-action"><Icon name="checkmark" size={14} /></span>Remember me</span>}
+          {c.slug === 'radio' && <span class="flex items-center gap-2 text-body-md"><span class="grid place-items-center size-5 rounded-full border-2 border-action-primary-default"><span class="size-2.5 rounded-full bg-action-primary-default"></span></span>Standard shipping</span>}
+          {c.slug === 'switch' && <span class="inline-flex items-center w-11 h-6 p-0.5 rounded-full bg-action-primary-default justify-end"><span class="size-5 rounded-full bg-icon-on-action shadow-xs"></span></span>}
+          {c.slug === 'chip' && <span class="inline-flex items-center gap-1 h-chip-md px-3 rounded-full bg-action-primary-default text-text-on-action text-body-sm"><Icon name="checkmark" size={14} />Design</span>}
+          {c.slug === 'avatar' && <span class="grid place-items-center size-avatar-xl rounded-full bg-action-primary-default text-text-on-action text-title-sm font-semibold">JF</span>}
+          {c.slug === 'menu' && <span class="w-40 p-1 rounded-overlay bg-bg-surface-raised border border-border-subtle shadow-elevation-overlay flex flex-col text-body-sm">{['Duplicate', 'Rename'].map(t => <span class="px-3 py-1.5 rounded-control text-text-secondary">{t}</span>)}<span class="my-1 border-t border-border-subtle"></span><span class="px-3 py-1.5 text-text-danger">Delete</span></span>}
+          {c.slug === 'tabs' && <span class="flex gap-1 p-1 rounded-overlay bg-bg-surface-sunken text-body-sm">{['Month', 'Year', 'All'].map((t, j) => <span class:list={['px-3 py-1.5 rounded-control', j === 0 ? 'bg-bg-surface shadow-xs text-text-brand' : 'text-text-secondary']}>{t}</span>)}</span>}
+          {c.slug === 'tooltip' && <span class="relative px-3 py-2 rounded-overlay bg-bg-surface-raised border border-border-subtle shadow-elevation-overlay text-body-sm text-text-secondary">Download as CSV</span>}
+          {c.slug === 'snackbar' && <span class="flex items-center gap-4 px-4 h-control-md rounded-control bg-bg-inverse text-text-inverse text-body-sm">Message archived<span class="font-semibold">Undo</span></span>}
+        </div>
+        <div class="p-5 flex flex-col gap-1">
+          <span class="text-body-md font-semibold">{c.name}</span>
+          <span class="text-body-sm text-text-secondary">{c.desc}</span>
+        </div>
+      </a>
+    ))}
+    <div class="rounded-card bg-bg-surface-sunken p-6 flex flex-col justify-center gap-2" data-cat="soon">
+      <p class="text-body-md font-semibold">Coming soon</p>
+      <p class="text-body-sm text-text-secondary">Modal, Table, Progress bar. Missing one?</p>
+      <a href={LINKS.issues} class="btn btn-outline btn-sm self-start mt-2">Request it on GitHub</a>
+    </div>
+  </section>
+  <script>
+    document.addEventListener('astro:page-load', () => {
+      const wrap = document.querySelector('[data-filter]'); if (!wrap) return;
+      const btns = wrap.querySelectorAll<HTMLButtonElement>('[data-group]');
+      btns.forEach(b => b.addEventListener('click', () => {
+        btns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        const g = b.dataset.group;
+        document.querySelectorAll<HTMLElement>('[data-grid] [data-cat]').forEach(card => {
+          card.hidden = !(g === 'All' || card.dataset.cat === g || card.dataset.cat === 'soon');
+        });
+      }));
+    });
+  </script>
+</Base>

@@ -1,0 +1,134 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import { LINKS, url } from '../lib/site';
+
+const tabs = [
+  { id: 'figma', label: 'Figma', note: 'No code needed. Everything lives in the Figma library.', steps: [
+    ['Open the library', 'Duplicate Space DS into your drafts.', null],
+    ['Turn on the components', 'Use them from the Assets panel. Variables, text styles and effects come included.', null],
+    ['Pick light or dark', 'Change the "theme" variable mode on any frame. Every component follows.', null],
+  ]},
+  { id: 'tailwind', label: 'Tailwind CSS', note: 'You need Tailwind CSS v4. Don\'t have it yet? Follow the official install guide and come back.', steps: [
+    ['Download the theme', "Grab it from GitHub or link it from the CDN. It's 21 kB minified.", ['terminal', `curl -O ${LINKS.cdnTheme}`]],
+    ['Import it in your main CSS', 'It goes right after Tailwind, together with the IBM Plex Sans font.', ['main.css', '@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap");\n@import "tailwindcss";\n@import "./theme.css";']],
+    ['Use the classes', 'Names match Figma. Semantic colors already switch in dark mode.', ['index.html', '<button class="h-control-md px-4 rounded-control\n  bg-action-primary-default hover:bg-action-primary-hover\n  text-text-on-action text-body-md font-semibold">\n  Save changes\n</button>']],
+    ['Turn on dark mode (optional)', 'It follows the system setting on its own. To force it, set it on the html tag.', ['index.html', '<html data-theme="dark">']],
+  ]},
+  { id: 'css', label: 'Plain CSS', note: 'No build step. One stylesheet with every token as a CSS variable.', steps: [
+    ['Link the stylesheet', 'Add one line inside <head>.', ['index.html', `<link rel="stylesheet"\n  href="${LINKS.cdnCss}">`]],
+    ['Use the variables', 'Every Figma variable is available with the same name.', ['styles.css', '.card {\n  background: var(--color-bg-surface);\n  color: var(--color-text-primary);\n  border-radius: var(--radius-card);\n  box-shadow: var(--shadow-elevation-raised);\n  padding: var(--space-4);\n}']],
+    ['Dark mode', 'Automatic with the system, or force it on <html>.', ['index.html', '<html data-theme="dark">']],
+  ]},
+  { id: 'tokens', label: 'Tokens JSON', note: 'For React, Style Dictionary, Tokens Studio or your own tools.', steps: [
+    ['Download tokens.json', 'All 361 tokens in the W3C design tokens (DTCG) format, with light and dark values.', null],
+    ['Read a token', 'Aliases point to primitives, so you keep the semantic layer.', ['tokens.json', '"theme": {\n  "bg": {\n    "surface": {\n      "$type": "color",\n      "$value": "{primitives.surface.50}"\n    }\n  }\n}']],
+  ]},
+  { id: 'ai', label: 'With AI', note: 'Space DS has a guide written for AI assistants (Claude, ChatGPT, Cursor…), so they build with your real tokens instead of guessing.', steps: [
+    ['Copy the llms.txt link', "llms.txt is a short index: what Space DS is, its key rules, and a link to every doc. You don't need to open it; the AI reads it.", ['llms.txt', LINKS.llms]],
+    ['Paste it in your chat and ask for UI', 'The AI opens the link, follows it to the docs it needs, and uses the right token names.', ['prompt', `Read ${LINKS.llms} and use Space DS.\nBuild a pricing card with a Get started button.\nUse only Space tokens. No hex colors.`]],
+    ['Using Claude Code or Cursor?', 'Clone the repo instead. Its CLAUDE.md teaches the rules automatically, and every doc is a Markdown file in /docs.', ['terminal', 'git clone https://github.com/josefloresdesign/space-ds.git']],
+  ]},
+];
+// Downloads shown in the side panel, per tab.
+const f = (name: string, desc: string, href: string, dl = true) => ({ name, desc, href, dl });
+const downloads: Record<string, ReturnType<typeof f>[]> = {
+  figma: [f('Space DS on Figma', 'Community file · free', LINKS.figma, false)],
+  tailwind: [f('theme.css', 'Tailwind v4 · 23 kB', url('files/theme.css')), f('theme.min.css', 'Tailwind v4 · minified · 21 kB', url('files/theme.min.css'))],
+  css: [f('styles.css', 'Plain CSS · 23 kB', url('files/styles.css')), f('styles.min.css', 'Plain CSS · minified · 21 kB', url('files/styles.min.css'))],
+  tokens: [f('tokens.json', 'DTCG format · 55 kB', url('files/tokens.json'))],
+  ai: [f('llms.txt', 'Guide for AI assistants', url('llms.txt'), false), f('CLAUDE.md', 'Rules for Claude Code · GitHub', `${LINKS.github}/blob/main/CLAUDE.md`, false), f('Markdown docs', 'All docs as .md · GitHub', `${LINKS.github}/tree/main/docs`, false)],
+};
+---
+<Base title="Get started" description="Install Space DS in Figma, Tailwind CSS v4, plain CSS, as JSON tokens or with AI.">
+  <section class="border-b border-border-subtle bg-bg-surface">
+    <div class="container-site pt-16 pb-0 flex flex-col gap-4">
+      <p class="reveal text-body-sm text-text-tertiary"><a href={url()} class="hover:text-text-secondary">Home</a> / Get started</p>
+      <h1 class="reveal text-heading-sm md:text-heading-md font-bold" data-delay="1">Get started with Space</h1>
+      <p class="reveal text-body-lg md:text-body-xl text-text-secondary max-w-3xl" data-delay="2">Choose how you'll use it. Mix paths freely: design in Figma and build with Tailwind using the same names.</p>
+    </div>
+  </section>
+
+  <div data-tabs>
+    <div class="border-b border-border-subtle bg-bg-surface sticky top-16 z-(--z-raised)">
+      <div role="tablist" aria-label="Setup paths" class="container-site flex overflow-x-auto [scrollbar-width:none]">
+        {tabs.map(t => (
+          <button type="button" role="tab" id={t.id} data-tab={t.id} aria-selected={t.id === 'tailwind' ? 'true' : 'false'} tabindex={t.id === 'tailwind' ? 0 : -1}
+            class="shrink-0 h-control-lg px-4 -mb-px whitespace-nowrap text-body-md text-text-secondary border-b-2 border-transparent hover:text-text-primary aria-selected:border-action-primary-default aria-selected:text-text-brand transition-colors">{t.label}</button>
+        ))}
+      </div>
+    </div>
+
+    <div class="container-site py-12 grid gap-12 lg:grid-cols-[1fr_22rem]">
+      <div class="min-w-0">
+        {tabs.map(t => (
+          <div role="tabpanel" data-panel={t.id} hidden={t.id !== 'tailwind'} aria-labelledby={t.id} class="flex flex-col gap-10">
+            <p class="rounded-card bg-bg-brand-subtle px-5 py-4 text-body-md text-text-brand">{t.note}</p>
+            {t.steps.map(([title, desc, code], i) => (
+              <div class="flex gap-4">
+                <span class="grid place-items-center size-8 shrink-0 rounded-full bg-bg-brand-subtle text-body-md font-semibold text-text-brand">{i + 1}</span>
+                <div class="flex-1 min-w-0 flex flex-col gap-3">
+                  <h2 class="text-title-sm font-semibold">{title}</h2>
+                  <p class="text-body-md text-text-secondary">{desc}</p>
+                  {code && <CodeBlock label={code[0]} code={code[1]} />}
+                  {t.id === 'figma' && i === 0 && <a href={LINKS.figma} class="btn btn-solid self-start"><Icon name="figma" />Open in Figma</a>}
+                  {t.id === 'tokens' && i === 0 && <a href={url('files/tokens.json')} download class="btn btn-solid self-start"><Icon name="download" />Download tokens.json</a>}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+        <div class="mt-12 card p-6 flex flex-col gap-3">
+          <h2 class="text-title-sm font-semibold">Done! What's next?</h2>
+          <div class="flex flex-wrap gap-3">
+            <a href={url('components')} class="btn btn-outline">Browse components</a>
+            <a href={url('docs/foundations/color')} class="btn btn-ghost">Customize my brand</a>
+            <a href={url('docs/tokens')} class="btn btn-ghost">Token reference</a>
+          </div>
+        </div>
+      </div>
+
+      <aside class="flex flex-col gap-6 lg:sticky lg:top-36 self-start w-full">
+        <div class="card p-6 flex flex-col gap-4 shadow-elevation-raised">
+          <h2 class="text-title-sm font-semibold">Downloads</h2>
+          {Object.entries(downloads).map(([id, items]) => (
+            <ul class="flex flex-col fade-swap" data-panel-extra={id} hidden={id !== 'tailwind'}>
+              {items.map(d => (
+                <li><a href={d.href} download={d.dl ? '' : undefined} class="flex items-center justify-between gap-3 py-3 border-b border-border-subtle group">
+                  <span><span class="block text-body-md font-semibold">{d.name}</span><span class="block text-body-sm text-text-tertiary">{d.desc}</span></span>
+                  <Icon name={d.dl ? 'download' : 'arrow'} size={18} class="shrink-0 text-icon-brand transition-transform duration-(--duration-fast) group-hover:translate-y-0.5" />
+                </a></li>
+              ))}
+            </ul>
+          ))}
+          <a href={LINKS.github} class="btn btn-outline w-full"><Icon name="github" />View on GitHub</a>
+        </div>
+        <div class="rounded-card bg-bg-surface-sunken p-6 flex flex-col gap-3" data-code-block>
+          <p class="flex items-center gap-2 text-body-md font-semibold"><Icon name="sparkles" size={18} class="text-icon-brand" />Working with AI?</p>
+          <p class="text-body-sm text-text-secondary">Copy this link and paste it in your chat with Claude or ChatGPT. The AI reads it and learns Space DS.</p>
+          <code data-copy-source class="text-body-sm font-semibold text-text-link break-all">{LINKS.llms}</code>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-copy class="btn btn-outline btn-sm"><Icon name="copy" /><span data-copy-label>Copy</span></button>
+            <a href="#ai" data-tab-link="ai" class="btn btn-ghost btn-sm">How it works</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <script>
+    // Open the tab from the URL hash (e.g. /get-started#css), on load and on in-page links.
+    const openFromHash = () => {
+      const id = location.hash.slice(1);
+      const tab = id && document.querySelector<HTMLElement>(`[data-tab="${id}"]`);
+      if (tab) { tab.click(); tab.closest('[data-tabs]')?.scrollIntoView({ behavior: 'smooth' }); }
+    };
+    document.addEventListener('astro:page-load', () => setTimeout(openFromHash)); // after the tabs are wired up
+    window.addEventListener('hashchange', openFromHash);
+    document.addEventListener('click', (e) => {
+      const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-tab-link]');
+      if (!link) return;
+      e.preventDefault(); history.replaceState(null, '', `#${link.dataset.tabLink}`); openFromHash();
+    });
+  </script>
+</Base>

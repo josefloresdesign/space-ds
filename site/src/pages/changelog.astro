@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { LINKS } from '../lib/site';
+const releases = [
+  { date: 'Nov 2026', title: 'Website, docs and code tokens', items: [['New', 'This website, built with Space DS itself.'], ['New', 'Markdown docs for every component and foundation, plus llms.txt for AI.'], ['New', 'Tokens for Tailwind v4 and CSS (minified too) and tokens.json, generated from Figma.']] },
+  { date: 'Nov 2026', title: 'Switch, Tabs and Menu refreshed', items: [['New', 'Switch with icon, loading and invalid states; new sm size.'], ['New', 'Tabs in 3 sizes, with counter and fill or hug nav-tabs.'], ['New', 'Menu with group title, divider, disabled and danger items.'], ['Improved', 'Shorter, simpler docs without jargon.']] },
+  { date: 'Nov 2026', title: 'Foundations and Button rebuilt', items: [['New', '361 variables in 13 collections, with light and dark modes.'], ['New', 'Button with 84 variants and Icon button with 72.'], ['Improved', 'Responsive layout with 6 breakpoints.']] },
+  { date: 'Jun 2024', title: 'Accessibility', items: [['Improved', 'Accessibility in labels and text fields.'], ['Fix', 'Background icon colors.']] },
+  { date: 'Feb 2024', title: 'Menu and Text area', items: [['New', 'New Menu component, with examples.'], ['New', 'New Text area component and an Input typing fix.']] },
+];
+---
+<Base title="Changelog" description="Everything new in Space DS, in Figma and in code.">
+  <section class="container-site pt-16 pb-10 flex flex-col gap-4">
+    <h1 class="reveal text-heading-sm md:text-heading-md font-bold">Changelog</h1>
+    <p class="reveal text-body-lg md:text-body-xl text-text-secondary" data-delay="1">Everything new in Space DS, in Figma and in code.</p>
+    <div class="reveal flex gap-3" data-delay="2"><a href={LINKS.github} class="btn btn-outline btn-sm"><Icon name="github" />Watch on GitHub</a></div>
+  </section>
+  <section class="container-site pb-24 flex flex-col gap-12">
+    {releases.map(r => (
+      <article class="reveal grid gap-4 md:grid-cols-[12rem_1fr] md:gap-12">
+        <div><p class="text-title-md font-semibold">{r.date}</p><p class="text-body-sm text-text-tertiary">Public beta</p></div>
+        <div class="md:border-l md:border-border-subtle md:pl-8 flex flex-col gap-4">
+          <h2 class="text-title-sm font-semibold">{r.title}</h2>
+          <ul class="flex flex-col gap-3">
+            {r.items.map(([k, t]) => (
+              <li class="flex items-start gap-3">
+                <span class:list={['shrink-0 inline-flex items-center h-6 px-2 rounded-full text-caption font-semibold', k === 'New' ? 'bg-action-primary-default text-text-on-action' : 'border border-border-default text-text-secondary']}>{k}</span>
+                <span class="text-body-md text-text-secondary">{t}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </article>
+    ))}
+  </section>
+</Base>
